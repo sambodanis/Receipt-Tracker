@@ -12,5 +12,7 @@ app.config["SECRET_KEY"] = db_settings["SECRET"]
 
 db = MongoEngine(app)
 
+import server.views
+
 if __name__ == '__main__':
     app.run()
