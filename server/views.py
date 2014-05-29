@@ -9,7 +9,10 @@ from server import app
 class UserAPI(MethodView):
 
     def get(self):
-        return jsonify({'res': True, 'users': User.objects.to_json()})
+        return jsonify({'res': True, 'users': [{'name': user.name,
+                                                'email': user.email,
+                                                'phone': user.phone,
+                                                'username': user.username} for user in User.objects]})
 
     def post(self):
 
