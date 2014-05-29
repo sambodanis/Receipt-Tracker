@@ -1,11 +1,13 @@
 from flask import Flask
+import os
 
 app = Flask(__name__)
 
 
 @app.route('/', methods=['POST'])
 def pull():
-    return 'Hello World!a'
+	os.system('git pull')
+    return 'Hello World!'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',
