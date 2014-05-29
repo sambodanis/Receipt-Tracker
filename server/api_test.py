@@ -2,7 +2,8 @@ import requests
 import json
 import datetime
 
-path = 'http://localhost:5000/'
+# path = 'http://localhost:9000/'
+path = 'http://ec2-54-194-186-121.eu-west-1.compute.amazonaws.com:9000/'
 user_path = path + 'users/'
 purchase_path = path + 'purchases/'
 
@@ -50,9 +51,9 @@ purchases = [
      }
 ]
 
-# for user in users:
-#     r = requests.post(url=user_path, data=user)
-#     print r.text
+for user in users:
+    r = requests.post(url=user_path, data=user)
+    print r.text
 
 for purchase in purchases:
     r = requests.post(url=purchase_path, data=purchase)

@@ -14,7 +14,6 @@ class UserAPI(MethodView):
     def post(self):
 
         data = request.form
-        print data
         if len(set(['name', 'email', 'phone', 'username']) &
                set([x for x in data])) == 4:
             user = User(name=data['name'], email=data[
@@ -39,8 +38,9 @@ class PurchaseAPI(MethodView):
     def updateDebt(self, purchase):
         owes = []
         for person in purchase.buyins:
-            debt = Debt.objects.get_or_create(
-                user_from=purchase.payer, user_to=person, defaults={'amount': 0})[0]
+            debt = Debt.objects.get_or_create(user_from=purchase.payer,
+                                              user_to=person,
+                                              defaults={'amount': 0})[0]
 
             per_person_amount = purchase.cost / len(purchase.buyins)
             Debt.objects(id=debt.id).update_one(inc__amount=per_person_amount)
@@ -66,14 +66,20 @@ class PurchaseAPI(MethodView):
             buyins = User.objects(username__in=data.getlist('buyins'))
             buyin_ids = map(lambda x: x.id, buyins)
 
-            purchase = Purchase(name=data['name'], cost=data[
-                'cost'], payer=payer_id, buyins=buyin_ids, time=data['time'])
+            purchase = Purchase(name=data['name'],
+                                cost=data['cost'],
+                                payer=payer_id,
+                                buyins=buyin_ids,
+                                time=data['time'])
             purchase.save()
 
             debt_up_to_date = self.updateDebt(purchase)
 
-            return jsonify({'res': True, 'messsage': 'Purchase added', 'debts': debt_up_to_date})
-        return jsonify({'res': False, 'message': 'default'})
+            return jsonify({'res': True,
+                            'messsage': 'Purchase added',
+                            'debts': debt_up_to_date})
+        return jsonify({'res': False,
+                        'message': 'default'})
 
 app.add_url_rule('/users/', view_func=UserAPI.as_view('users'))
 app.add_url_rule('/purchases/', view_func=PurchaseAPI.as_view('purchases'))
