@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask.ext.mongoengine.wtf import model_form
 from server.models import User, Debt, Purchase
 from server import app
-
+import json
 
 class UserAPI(MethodView):
 
@@ -55,7 +55,7 @@ class PurchaseAPI(MethodView):
         pass
 
     def post(self):
-        data = request.form
+        data = json.loads(request.form)
         if len(set(['name', 'cost', 'payer', 'buyins', 'time']) &
                set([x for x in data])) == 5:
 
