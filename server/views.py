@@ -6,6 +6,7 @@ from server.models import User, Debt, Purchase
 from server import app
 import json
 
+
 class UserAPI(MethodView):
 
     def get(self):
@@ -56,6 +57,7 @@ class PurchaseAPI(MethodView):
 
     def post(self):
         data = request.json
+        print data
         if len(set(['name', 'cost', 'payer', 'buyins', 'time']) &
                set([x for x in data])) == 5:
 
@@ -66,7 +68,7 @@ class PurchaseAPI(MethodView):
             payer_id = payer[0].id
 
                 # Extract ids of those who buy in
-            buyins = User.objects(username__in=data.getlist('buyins'))
+            buyins = User.objects(username__in=data['buyins'])
             buyin_ids = map(lambda x: x.id, buyins)
 
             purchase = Purchase(name=data['name'],
