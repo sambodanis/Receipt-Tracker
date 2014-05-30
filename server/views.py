@@ -55,7 +55,7 @@ class PurchaseAPI(MethodView):
         pass
 
     def post(self):
-        data = json.loads(request.form)
+        data = request.json
         if len(set(['name', 'cost', 'payer', 'buyins', 'time']) &
                set([x for x in data])) == 5:
 
