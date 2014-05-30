@@ -5,6 +5,7 @@ from flask.ext.mongoengine.wtf import model_form
 from server.models import User, Debt, Purchase
 from server import app
 import json
+import datetime
 
 
 class UserAPI(MethodView):
@@ -56,10 +57,10 @@ class PurchaseAPI(MethodView):
         pass
 
     def post(self):
-        data = request.json
+        data = request.form
         print data
-        if len(set(['name', 'cost', 'payer', 'buyins', 'time']) &
-               set([x for x in data])) == 5:
+        if len(set(['name', 'cost', 'payer', 'buyins']) &
+               set([x for x in data])) == 4:
 
             # Validate that users involved have accounts
 
@@ -75,7 +76,7 @@ class PurchaseAPI(MethodView):
                                 cost=data['cost'],
                                 payer=payer_id,
                                 buyins=buyin_ids,
-                                time=data['time'])
+                                time=datetime.datetime.now())
             purchase.save()
 
             debt_up_to_date = self.updateDebt(purchase)
